@@ -10,7 +10,7 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-item href="#">Sign In</b-nav-item>
         <b-nav-item><n-link to="/auth/login">Login</n-link></b-nav-item>
-        <b-button size="sm" class="my-2 my-sm-0" type="submit">Logout</b-button>
+        <b-button size="sm" class="my-2 my-sm-0" @click="logout">Logout</b-button>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -18,9 +18,22 @@
 </template>
 
 <script>
+import { auth } from '~/plugins/firebase.js'
+
 export default {
-    data: {
+    data() {
+      return {
         name: 'Navbar'
+      }
+    }, 
+    methods: {
+      logout() {
+        firebase.auth().signOut().then(function() {
+          this.app.router.push('/')
+        }).catch(function(error) {
+          console.log(error)
+        });
+      }
     }
 }
 </script>

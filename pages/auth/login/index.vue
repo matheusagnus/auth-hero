@@ -1,18 +1,18 @@
 <template>
     <section class="login container">
         <div class="card border-primary mb-3" style="max-width: 20rem;">
-            <b-form class="m-3">
+            <b-form @submit.prevent="login" class="m-3">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email Address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    <input type="email" v-model="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Password</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Password">
+                    <input type="password" v-model="password" class="form-control" aria-describedby="emailHelp" placeholder="Password">
                 </div>
 
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </b-form>
         </div>
@@ -20,39 +20,27 @@
 </template>
 
 <script>
-import { auth } from '~/plugins/firebase'
-
-  export default {
+ export default {
     layout: 'empty',
     data() {
       return {
-        form: {
-          email: '',
-          name: '',
-          food: null,
-          checked: []
-        },
-        foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-        show: true
+        email: '',
+        password: ''
       }
     },
     methods: {
-      onSubmit(evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
-      onReset(evt) {
-        evt.preventDefault()
-        // Reset our form values
-        this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
-        // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
+      login() {
+        if(this.email && this.password) {
+            console.log(this.email)
+            this.$store.dispatch('users/userSignIn', {
+                email: this.email,
+                password: this.password
+            }).then(() => {
+                console.log('mandou pro store/user')
+            })
+        } else {
+            console.log('errou')
+          }
       }
     }
   }
